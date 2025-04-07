@@ -37,17 +37,20 @@ function borrarDatos() {
 // Ajustar el formato de fecha al pegar
 function ajustarFormatoFecha(inputField) {
     inputField.addEventListener("paste", (event) => {
-        event.preventDefault(); // Evita el pegado directo
+        event.preventDefault();
         const pastedData = (event.clipboardData || window.clipboardData).getData("text");
 
-        // Detecta y convierte el formato DD/MM/YYYY a YYYY-MM-DD
-        const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+        // Detecta y transforma el formato D/M/YYYY o DD/MM/YYYY a YYYY-MM-DD
+        const regex = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
         if (regex.test(pastedData)) {
             const parts = pastedData.match(regex);
-            const formattedDate = `${parts[3]}-${parts[2]}-${parts[1]}`; // Convierte al formato YYYY-MM-DD
+            const day = parts[1].padStart(2, "0"); // Asegura 2 dígitos para el día
+            const month = parts[2].padStart(2, "0"); // Asegura 2 dígitos para el mes
+            const year = parts[3];
+            const formattedDate = `${year}-${month}-${day}`; // Formato YYYY-MM-DD
             inputField.value = formattedDate;
         } else {
-            alert("Por favor, pega una fecha en el formato DD/MM/YYYY.");
+            alert("Por favor, pega una fecha en el formato D/M/YYYY o DD/MM/YYYY.");
         }
     });
 }
