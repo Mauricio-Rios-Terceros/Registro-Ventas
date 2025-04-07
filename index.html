@@ -1,71 +1,52 @@
-function guardarRanking() {
-    const comercial = document.getElementById('comercialRanking').value;
-    const fecha = document.getElementById('fechaRanking').value;
-    const ventasTotal = parseFloat(document.getElementById('ventasTotalRanking').value);
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Ventas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Registro de Ventas</h1>
+    <form id="ventaForm">
+        <label for="comercial">Comercial:</label>
+        <input type="text" id="comercial" required><br>
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" required><br>
+        <label for="lineaProducto">Línea de Producto:</label>
+        <input type="text" id="lineaProducto" required><br>
+        <label for="codigoProducto">Código Producto:</label>
+        <input type="text" id="codigoProducto" required><br>
+        <label for="pais">País:</label>
+        <input type="text" id="pais" required><br>
+        <label for="unidades">Unidades:</label>
+        <input type="number" id="unidades" required><br>
+        <label for="precioUnitario">Precio Unitario:</label>
+        <input type="number" step="0.01" id="precioUnitario" required><br>
+        <label for="ventaTotal">Venta Total:</label>
+        <input type="number" step="0.01" id="ventaTotal" required><br><br>
+        <button type="button" onclick="guardarVenta()">Guardar</button>
+        <button type="button" onclick="borrarDatos()">Borrar Datos</button>
+    </form>
 
-    if (!comercial || !fecha || !ventasTotal) {
-        alert("Por favor, complete todos los campos.");
-        return;
-    }
+    <h2>Datos Registrados</h2>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Comercial</th>
+                <th>Fecha</th>
+                <th>Línea de Producto</th>
+                <th>Código Producto</th>
+                <th>País</th>
+                <th>Unidades</th>
+                <th>Precio Unitario</th>
+                <th>Venta Total</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 
-    const rankingTable = document.getElementById('rankingTable').getElementsByTagName('tbody')[0];
-    const newRow = rankingTable.insertRow();
-
-    newRow.insertCell(0).textContent = comercial;
-    newRow.insertCell(1).textContent = fecha;
-    newRow.insertCell(2).textContent = ventasTotal;
-
-    document.getElementById('rankingForm').reset();
-
-    ordenarRanking();
-}
-
-function ordenarRanking() {
-    const rows = Array.from(document.getElementById('rankingTable').getElementsByTagName('tbody')[0].rows);
-    rows.sort((a, b) => parseFloat(b.cells[2].textContent) - parseFloat(a.cells[2].textContent));
-    const rankingTable = document.getElementById('rankingTable').getElementsByTagName('tbody')[0];
-    rankingTable.innerHTML = "";
-    rows.forEach(row => rankingTable.appendChild(row));
-}
-
-function exportarExcel() {
-    let csvContent = "data:text/csv;charset=utf-8,";
-    const rows = document.querySelectorAll("#rankingTable tr");
-
-    rows.forEach(row => {
-        const cols = Array.from(row.children).map(col => col.textContent);
-        csvContent += cols.join(",") + "\n";
-    });
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "ranking_comercial.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-// Ajustar el formato de fecha al pegar, corrigiendo días/meses sin ceros iniciales
-function ajustarFormatoFecha(inputField) {
-    inputField.addEventListener("paste", (event) => {
-        event.preventDefault(); // Evita el pegado directo
-        const pastedData = (event.clipboardData || window.clipboardData).getData("text");
-
-        // Detecta y transforma el formato D/M/YYYY, DD/MM/YYYY a YYYY-MM-DD
-        const regex = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/; // Acepta días y meses de 1 o 2 dígitos
-        if (regex.test(pastedData)) {
-            const parts = pastedData.match(regex);
-            const day = parts[1].padStart(2, "0"); // Asegura 2 dígitos para el día
-            const month = parts[2].padStart(2, "0"); // Asegura 2 dígitos para el mes
-            const year = parts[3];
-            const formattedDate = `${year}-${month}-${day}`; // Formato YYYY-MM-DD
-            inputField.value = formattedDate;
-        } else {
-            alert("Por favor, pega una fecha en el formato D/M/YYYY o DD/MM/YYYY.");
-        }
-    });
-}
-
-// Llamar la función para el campo de fecha en el Ranking Comercial
-ajustarFormatoFecha(document.getElementById("fechaRanking"));
+    <script src="script.js"></script>
+</body>
+</html>
