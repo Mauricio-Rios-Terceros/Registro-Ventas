@@ -33,3 +33,24 @@ function borrarDatos() {
     dataTable.innerHTML = ""; // Elimina todas las filas de la tabla
     alert("Todos los datos han sido eliminados.");
 }
+
+// Ajustar el formato de fecha al pegar
+function ajustarFormatoFecha(inputField) {
+    inputField.addEventListener("paste", (event) => {
+        event.preventDefault(); // Evita el pegado directo
+        const pastedData = (event.clipboardData || window.clipboardData).getData("text");
+
+        // Detecta y convierte el formato DD/MM/YYYY a YYYY-MM-DD
+        const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+        if (regex.test(pastedData)) {
+            const parts = pastedData.match(regex);
+            const formattedDate = `${parts[3]}-${parts[2]}-${parts[1]}`; // Convierte al formato YYYY-MM-DD
+            inputField.value = formattedDate;
+        } else {
+            alert("Por favor, pega una fecha en el formato DD/MM/YYYY.");
+        }
+    });
+}
+
+// Llamar la función para el campo de fecha
+ajustarFormatoFecha(document.getElementById("fecha"));
