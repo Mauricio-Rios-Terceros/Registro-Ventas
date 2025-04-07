@@ -27,3 +27,9 @@ function guardarVenta() {
 
     document.getElementById('ventaForm').reset();
 }
+
+function borrarDatos() {
+    const dataTable = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+    dataTable.innerHTML = ""; // Elimina todas las filas de la tabla
+    alert("Todos los datos han sido eliminados.");
+}
